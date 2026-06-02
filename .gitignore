@@ -1,0 +1,6 @@
+# Visual Studio privremene datoteke
+.vs/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
