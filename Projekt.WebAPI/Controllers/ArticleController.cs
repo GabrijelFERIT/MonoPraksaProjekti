@@ -1,37 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Projekt.WebAPI.Models;
 namespace Projekt.WebAPI.Controllers
 {
 
     [ApiController]
     [Route("[controller]")]
-    public class ArticleController
+    public class ArticleController : ControllerBase
     {
 
         List<Article> articles = new List<Article>();
 
         [HttpGet(Name = "getArticleList")]
 
-        public List<Article> GetArticleList()
+        public IActionResult GetArticleList()
         {
 
-            if (articles.Count() == 0)
+            if (articles.Count() <= 0)
             {
-                return null;
+                return NotFound(404);
             }
-        return articles;
+            return Ok(articles);
+
         }
 
         [HttpGet("{id}")]
 
-        public Article GetArticle(int id)
+        public IActionResult GetArticle(long id)
         {
+
 
             Article article = articles.FirstOrDefault(article => article.Id == id);
 
-            return article;
+            if (article == null)
+            {
+                return NotFound(404);
+            }
+
+            return Ok(article);
 
         }
+
+
 
 
     }

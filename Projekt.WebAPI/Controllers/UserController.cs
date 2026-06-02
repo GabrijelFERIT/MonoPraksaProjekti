@@ -12,7 +12,7 @@ namespace Projekt.WebAPI.Controllers
     public class UserController : ControllerBase
     {
 
-    
+
         private static List<UserModel> listOfUsers = new List<UserModel>();
 
         static UserController()
@@ -21,26 +21,29 @@ namespace Projekt.WebAPI.Controllers
             listOfUsers = userList.CreateUserList();
         }
 
-        [HttpGet(Name = "getUserInfo")]
+        //[HttpGet(Name = "getUserInfo")]
 
-        public List<UserModel> GetAllUserInfo()
-        {
-            if (listOfUsers.Count() <= 0)
-            {
-                return null; 
-            }
-             return listOfUsers;
+        //public IActionResult GetAllUserInfo()
+        //{
+        //    if (listOfUsers.Count() <= 0)
+        //    {
+        //        return NotFound(404); 
+        //    }
+        //     return Ok(listOfUsers);
 
-        }
+        //}
 
         [HttpGet("{id}")]
 
-        public UserModel GetSingleUserInfo(long id)
+        public IActionResult GetSingleUserInfo(long id)
         {
-            UserModel user =listOfUsers.FirstOrDefault(user => user.Id == id);
+            UserModel user = listOfUsers.FirstOrDefault(user => user.Id == id);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            return NotFound(404);
 
- 
-            return user;
 
         }
 
@@ -58,63 +61,104 @@ namespace Projekt.WebAPI.Controllers
 
         //}
 
-        public UserModel PostCreateUser(UserModel user)
+        public IActionResult PostCreateUser(UserModel user)
         {
 
             UserModel newUser = user;
 
             listOfUsers.Add(newUser);
 
-            return newUser;
+
+            return Ok(newUser);
 
 
         }
 
 
+        [HttpPost("{id}/addarticle")]
+        public IActionResult PostAddArticleUser(long id, [FromBody] Article article)
+        {
+
+
+
+            UserModel user = listOfUsers.FirstOrDefault(user => user.Id == article.UserId);
+                if (user == null)
+            {
+                return NotFound(404);
+            }
+            
+                user.Articles.Add(article);
+
+                return Ok(user);
+        }
+
 
         [HttpPut("{id}")]
 
 
-        public string PutUpdateUserInfo(long id, [FromBody] UserModel updatedData)
+        public IActionResult PutUpdateUserInfo(long id, [FromBody] UserModel updatedData)
         {
-            string message = "Something went wrong";
-            foreach (var user in listOfUsers)
-            {
-                if (user.Id == id)
-                {
-                    user.FirstName = updatedData.FirstName;
-                    user.LastName = updatedData.LastName;
-                    user.Age = updatedData.Age;
-                    user.Email = updatedData.Email;
-                    user.Password = updatedData.Password;
 
-                    message = $"Successfully updated data for {user.FirstName} {user.LastName}, code 200";
-                    return message;
+
+            UserModel user = listOfUsers.FirstOrDefault(user => user.Id == id);
+
+            if (user.Id != null)
+                {
+                user.FirstName = updatedData.FirstName;
+                user.LastName = updatedData.LastName;
+                user.Age = updatedData.Age;
+                user.Email = updatedData.Email;
+                user.Password = updatedData.Password;
+
+                return Ok(user);
                 }
 
-            }
-            return message;
+            return NotFound(404);
             
         }
 
 
         [HttpDelete("{id}")]
 
-        public string DeleteSingleUserInfo(long id)
+        public IActionResult DeleteSingleUserInfo(long id)
         {
 
-            string message = "Something went terribly wrong!";
-            foreach (var user in listOfUsers)
+            
+            UserModel user = listOfUsers.FirstOrDefault(user => user.Id == id);
+
+
+            if(user != null)
             {
-                if (user.Id == id)
-                {
-                    listOfUsers.Remove(user);
-                    return message = $"Successfully deleted user with id {id}, code 200";
-                }
+                listOfUsers.Remove(user);
+                return Ok(200);
             }
-            return message = $"User with id {id} was not found, code 404";
+            return NotFound(404);
+
         }
 
+
+        [HttpGet (Name = "getFilteredUsers")]
+        public IActionResult GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
+        {
+            List<UserModel> filteredUsers = listOfUsers
+                .Where(user => age == 0 || user.Age > age)
+                .Where(user => user.FirstName.Contains(name) || string.IsNullOrEmpty(name))
+                .Where(user => user.LastName.Contains(lastName) || string.IsNullOrEmpty(user.LastName))
+                .Where(user => id == 0 || user.Id == id)
+                .Where(user => user.Email.Contains(email) || string.IsNullOrEmpty(user.Email))
+                .Where(user => numberOfArticles == 0 || user.Articles.Count() > numberOfArticles)
+                .ToList();
+
+
+            if (filteredUsers.Count() <= 0)
+            {
+                return NotFound(404);
+                
+            }
+            return Ok(filteredUsers);
+
+
+        }
 
 
     }

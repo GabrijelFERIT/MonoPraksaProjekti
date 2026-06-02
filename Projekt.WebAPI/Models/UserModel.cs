@@ -15,6 +15,7 @@
 
         public string Password { get; set; }
 
+        public List<Article> Articles { get; set; } = new List<Article>();
         public UserModel(string firstName, string lastName, long id, short age, string email, string password) 
         {
         
@@ -24,6 +25,7 @@
             this.Age = age;
             this.Email = email;
             this.Password = password;
+            
 
         }
 
