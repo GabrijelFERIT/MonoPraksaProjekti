@@ -1,0 +1,209 @@
+CREATE TABLE "Employer" (
+  "Id" BIGINT PRIMARY KEY,
+  "Name" VARCHAR(255),
+  "City" VARCHAR(100),
+  "Street" VARCHAR(150),
+  "StreetNumber" SMALLINT,
+  "StreetCode" CHAR(10),
+  "PostalCode" INT
+);
+
+
+
+CREATE TABLE "Product" (
+  "Id" BIGINT PRIMARY KEY,
+  "ProductName" VARCHAR(255),
+  "Price" DECIMAL(10,2), 
+  "Description" TEXT,
+  "AvailableAmount" INT
+);
+
+CREATE TABLE "Employee" (
+  "Id" BIGINT PRIMARY KEY,
+  "FirstName" VARCHAR(100),
+  "LastName" VARCHAR(100),
+  "Email" VARCHAR(255),
+  "Password" VARCHAR(255),
+  "PhoneNumber" BIGINT,
+  "BasePay" DECIMAL(10,2),
+  "EmploymentDate" DATE,
+  "EmployerId" BIGINT References "Employer" ("Id")
+);
+
+CREATE TABLE "Customer" (
+  "Id" BIGINT PRIMARY KEY,
+  "FirstName" VARCHAR(100),
+  "LastName" VARCHAR(100),
+  "Email" VARCHAR(255),
+  "Password" VARCHAR(255),
+  "PhoneNumber" BIGINT
+);
+
+CREATE TABLE "BillingInformation" (
+  "Id" BIGINT PRIMARY KEY,
+  "CreditCardNumber" BIGINT,
+  "SecurityNumber" SMALLINT,
+  "ExpirationMonth" SMALLINT,
+  "ExpirationYear" SMALLINT,
+  "CustomerId" BIGINT References "Customer" ("Id")
+);
+
+CREATE TABLE "Transaction" (
+  "Id" BIGINT PRIMARY KEY,
+  "CustomerId" BIGINT References "Customer" ("Id"),
+  "ProductId" BIGINT References "Product" ("Id"),
+  "EmployerId" BIGINT References "Employer" ("Id"),
+  "BillingId" BIGINT References "BillingInformation" ("Id"),
+  "NumberOfProduct" INT
+);
+
+
+
+
+
+insert into "Employer" ("Id", "Name", "City", "Street", "StreetNumber", "StreetCode", "PostalCode")
+Values
+(0, 'Studentski Sevris', 'Osijek', 'Petra Svačića', '1', 'c', '31000'),
+(1, 'Kaufland', 'Osijek', 'Vukovarska', '3', 'f', '31000');
+
+
+
+
+
+
+
+
+
+insert into "Customer" ("Id", "FirstName", "LastName", "Email", "Password", "PhoneNumber")
+Values(1, 'Gabrijel', 'Barukčić', 'gbarukcic@mail.com', '12345', '385976810799'),
+(2, 'Pero', 'Perić', 'pp@mail.com', '123456', '38763738047'),
+(3, 'Ivo', 'Ivić', 'ii@mail.com', '55555aa', '333333333');
+
+
+insert into "BillingInformation" ("Id", "CreditCardNumber", "SecurityNumber", "ExpirationMonth", "ExpirationYear", "CustomerId")
+VALUES
+(200, 1234567890123456, 123, 12, 2029, 1), 
+(201, 9876543210987654, 456, 5, 2028, 2),  
+(202, 5555444433332222, 789, 8, 2030, 3);
+
+insert into "Employee" ("Id", "FirstName", "LastName", "Email", "Password", "PhoneNumber", "BasePay", "EmploymentDate", "EmployerId")
+VALUES
+(100, 'Ana', 'Anić', 'ana.anic@mail.com', 'sifraEmp1', 38591111111, 1200.00, '2025-01-15', 0),  
+(101, 'Marko', 'Marić', 'marko.m@mail.com', 'sifraEmp2', 38592222222, 1500.00, '2024-06-01', 1), 
+(102, 'Ivan', 'Ivić', 'ivan.i@mail.com', 'sifraEmp3', 38593333333, 1100.00, '2026-02-20', 0),
+(120, 'Marko', 'Marčin', 'ivan.i@mail.com', 'sifraEmp3', 38593333333, 1100.00, '2026-02-20', null); 
+
+
+insert into "Product" ("Id", "ProductName", "Price", "Description", "AvailableAmount")
+VALUES
+(10, 'Slušalice Sony WH-1000XM4', 250.00, 'Noise cancelling bežične slušalice', 10),
+(20, 'Tipkovnica Logitech G Pro', 120.50, 'Mehanička igraća tipkovnica', 15),
+(30, 'Monitor Dell 27"', 300.00, '4K uredski monitor za produktivnost', 8);
+
+
+insert into "Transaction" ("Id", "CustomerId", "ProductId", "EmployerId", "BillingId", "NumberOfProduct")
+VALUES
+(500, 1, 10, 0, 200, 1), 
+(501, 2, 20, 1, 201, 2), 
+(502, 3, 30, 1, 202, 1);
+
+
+
+select* from "Employer";
+select* from "Employee" where "EmployerId"  = 0;
+
+select* from "Employee";
+
+select e."FirstName",
+e."LastName",
+posl."Name" as "ImeFirme"
+from "Employee" e
+inner join "Employer" posl
+on posl."Id" = e."EmployerId" ;
+
+
+
+select e."FirstName",
+e."LastName",
+posl."Name" as "ImeFirme"
+from "Employee" e
+left join "Employer" posl
+on posl."Id" = e."EmployerId";
+
+
+
+
+select e."FirstName",
+e."LastName",
+posl."Name" as "ImeFirme"
+from "Employee" e
+right join "Employer" posl
+on posl."Id" = e."EmployerId" ;
+
+
+
+
+DROP TABLE "Employer" CASCADE;
+DROP TABLE "Product" CASCADE;
+DROP TABLE "Customer" CASCADE;
+DROP TABLE "Employee" CASCADE;
+DROP TABLE "BillingInformation" CASCADE;
+DROP TABLE "Transaction" CASCADE;
+
+
+
+
+
+
+WebAPI modeli
+
+
+
+
+
+create table "UserModel"(
+
+"Id" bigint primary key,
+"FirstName" varchar,
+"Age" smallint,
+"Email" varchar,
+"Password" varchar
+);
+
+
+
+create table "Article"(
+"Id" bigint primary key,
+"Name" varchar,
+"Description" text,
+"CurrentPrice" dec(10,2),
+"UserId" bigint references "UserModel" ("Id")
+);
+
+
+insert into "UserModel"("Id", "FirstName", "Age", "Email", "Password")
+values
+(2, 'Gabrijel', 25, 'g@mail.com', '12345'),
+(4, 'Pero', 25, 'g@mail.com', '12234'),
+(5, 'Ivo', 25, 'g@mail.com', '12234556');
+
+
+insert into "Article" ("Id", "Name", "Description", "CurrentPrice", "UserId")
+values
+(1, 'Laptop ASUS ROG Ally', 'Super tech', 1500, 2),
+(5, 'Laptop ASUS ROG Ally 2', 'Super tech', 1600, 4),
+(6, 'Laptop ASUS ROG Ally 4', 'Super tech super!', 1800, 5);
+
+
+
+select u."FirstName",
+a."Name" as "ProductName"
+from "UserModel" u
+inner join "Article" a 
+on u."Id" = a."UserId";
+
+select* from "UserModel" um 
+inner join "Article" a 
+on um."Id" = a."UserId" where a."CurrentPrice" >1550;
+
+

@@ -15,5 +15,8 @@ namespace Projekt.WebAPI.Models
 
         public long UserId { get; set; }
 
+        public UserModel User { get; set; } = new UserModel();
+
+        
     }
 }

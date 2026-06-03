@@ -117,6 +117,25 @@ namespace Projekt.WebAPI.Controllers
             
         }
 
+        //[HttpPut("{id}/updataeArticle")]
+        //public IActionResult PutUpdateArticleUser(long id, [FromBody] Article updatedArticle)
+        //{
+        //    UserModel user = listOfUsers.FirstOrDefault(user => user.Id == id);
+        //    if (user == null)
+        //    {
+        //        return NotFound(404);
+        //    }
+        //    Article article = user.Articles.FirstOrDefault(article => article.Id == updatedArticle.Id);
+        //    if (article == null)
+        //    {
+        //        return NotFound(404);
+        //    }
+        //    article.Name = updatedArticle.Name;
+        //    article.CurrentPrice = updatedArticle.CurrentPrice;
+        //    article.Description = updatedArticle.Description;
+        //    return Ok(article);
+        //}
+
 
         [HttpDelete("{id}")]
 
