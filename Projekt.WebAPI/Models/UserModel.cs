@@ -15,9 +15,9 @@
 
         public string Password { get; set; }
 
-        public List<Article> Articles { get; set; } = new List<Article>();
+        public List<Article>? Articles { get; set; } = new List<Article>();
 
-        public long ArticleId { get; set; }
+
 
 
         

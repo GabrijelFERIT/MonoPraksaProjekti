@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Text.Json.Serialization;
 
 namespace Projekt.WebAPI.Models
 {
@@ -15,8 +16,8 @@ namespace Projekt.WebAPI.Models
 
         public long UserId { get; set; }
 
-        public UserModel User { get; set; } = new UserModel();
-
+        [JsonIgnore]
+        public UserModel? User { get; set; } = null;
         
     }
 }
