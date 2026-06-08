@@ -1,19 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="10.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Projekti.Common.Repository\Projekti.Common.Repository.csproj" />
+    <ProjectReference Include="..\Projekti.Common\Projekti.Common.csproj" />
     <ProjectReference Include="..\Projekti.Model\Projekti.Model.csproj" />
-    <ProjectReference Include="..\Projekti.UserModelService\Projekti.Service.csproj" />
   </ItemGroup>
 
 </Project>

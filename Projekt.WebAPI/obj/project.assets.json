@@ -156,6 +156,81 @@
         "build": {
           "buildTransitive/net8.0/_._": {}
         }
+      },
+      "Projekti.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Npgsql": "10.0.3"
+        },
+        "compile": {
+          "bin/placeholder/Projekti.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Common.dll": {}
+        }
+      },
+      "Projekti.Common.Repository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Projekti.Common.Repository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Common.Repository.dll": {}
+        }
+      },
+      "Projekti.Common.Service/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Projekti.Common.Service.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Common.Service.dll": {}
+        }
+      },
+      "Projekti.Model/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Projekti.Model.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Model.dll": {}
+        }
+      },
+      "Projekti.Repository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Npgsql": "10.0.3",
+          "Projekti.Common": "1.0.0",
+          "Projekti.Common.Repository": "1.0.0",
+          "Projekti.Model": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Projekti.Repository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Repository.dll": {}
+        }
+      },
+      "Projekti.Service/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Projekti.Common": "1.0.0",
+          "Projekti.Common.Service": "1.0.0",
+          "Projekti.Model": "1.0.0",
+          "Projekti.Repository": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Projekti.Service.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Service.dll": {}
+        }
       }
     }
   },
@@ -658,11 +733,43 @@
         "system.diagnostics.diagnosticsource.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Projekti.Common/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Common/Projekti.Common.csproj",
+      "msbuildProject": "../Projekti.Common/Projekti.Common.csproj"
+    },
+    "Projekti.Common.Repository/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Common.Repository/Projekti.Common.Repository.csproj",
+      "msbuildProject": "../Projekti.Common.Repository/Projekti.Common.Repository.csproj"
+    },
+    "Projekti.Common.Service/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Common.Service/Projekti.Common.Service.csproj",
+      "msbuildProject": "../Projekti.Common.Service/Projekti.Common.Service.csproj"
+    },
+    "Projekti.Model/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Model/Projekti.Model.csproj",
+      "msbuildProject": "../Projekti.Model/Projekti.Model.csproj"
+    },
+    "Projekti.Repository/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Repository/Projekti.Repository.csproj",
+      "msbuildProject": "../Projekti.Repository/Projekti.Repository.csproj"
+    },
+    "Projekti.Service/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.UserModelService/Projekti.Service.csproj",
+      "msbuildProject": "../Projekti.UserModelService/Projekti.Service.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Npgsql >= 10.0.3",
+      "Projekti.Model >= 1.0.0",
+      "Projekti.Service >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
   },
@@ -699,7 +806,14 @@
         "net8.0": {
           "framework": "net8.0",
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj": {
+              "projectPath": "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj"
+            },
+            "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.UserModelService\\Projekti.Service.csproj": {
+              "projectPath": "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.UserModelService\\Projekti.Service.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

@@ -1,3 +1,28 @@
 <Solution>
-  <Project Path="Projekt.WebAPI/Projekt.WebAPI.csproj" />
+  <Project Path="Projekt.WebAPI/Projekt.WebAPI.csproj">
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+    <BuildDependency Project="Projekti.Model/Projekti.Model.csproj" />
+    <BuildDependency Project="Projekti.UserModelService/Projekti.Service.csproj" />
+  </Project>
+  <Project Path="Projekti.Common.Repository/Projekti.Common.Repository.csproj" Id="950f88c2-4202-46de-aaa5-71861509588f">
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+  </Project>
+  <Project Path="Projekti.Common.Service/Projekti.Common.Service.csproj" Id="4a78bff6-9682-4972-a56c-045a943a6480">
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+  </Project>
+  <Project Path="Projekti.Common/Projekti.Common.csproj" Id="c6550e36-45e1-4e71-9dbb-dddaade85f06" />
+  <Project Path="Projekti.Model/Projekti.Model.csproj" Id="a457ee33-3ac8-4e1b-a378-7580a4d64a66">
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+  </Project>
+  <Project Path="Projekti.Repository/Projekti.Repository.csproj" Id="6174a034-b642-4b44-ae64-96fd579d7c74">
+    <BuildDependency Project="Projekti.Common.Repository/Projekti.Common.Repository.csproj" />
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+    <BuildDependency Project="Projekti.Model/Projekti.Model.csproj" />
+  </Project>
+  <Project Path="Projekti.UserModelService/Projekti.Service.csproj" Id="aba96444-369f-488a-9452-f8b9909399a2">
+    <BuildDependency Project="Projekti.Common.Service/Projekti.Common.Service.csproj" />
+    <BuildDependency Project="Projekti.Common/Projekti.Common.csproj" />
+    <BuildDependency Project="Projekti.Model/Projekti.Model.csproj" />
+    <BuildDependency Project="Projekti.Repository/Projekti.Repository.csproj" />
+  </Project>
 </Solution>
