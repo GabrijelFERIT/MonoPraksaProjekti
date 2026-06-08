@@ -22,16 +22,21 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpGet("{id}")]
 
-        public ActionResult GetSingleUser(long id)
+        public async Task<ActionResult> GetSingleUser(long id)
         {            
-            return service.GetSingleUser(id) != null ? Ok(service.GetSingleUser(id)) : NotFound("No users found.");
+            var user = await service.GetSingleUser(id);            
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            return NotFound("No users found.");
         }
 
         [HttpPost(Name = "createNewUser")]
 
-        public IActionResult CreateNewUser([FromBody] UserModel user)
+        public async Task<IActionResult> CreateNewUser([FromBody] UserModel user)
         {
-            var createdUser = service.CreateUser(user);
+            var createdUser = await service.CreateUser(user);
             if (createdUser != null)
             {
                 return Ok(createdUser);
@@ -41,9 +46,9 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpPost("{id}/addarticle")]
 
-        public IActionResult AddArticleToUser(long id, [FromBody] Article article)
+        public async Task<IActionResult> AddArticleToUser(long id, [FromBody] Article article)
         {
-            var updatedUser = service.AddArticleToUser(id, article);
+            var updatedUser = await service.AddArticleToUser(id, article);
             if (updatedUser != null)
             {
                 return Ok(updatedUser);
@@ -53,9 +58,9 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpPut("{id}")]
 
-        public IActionResult UpdateSingleUser(long id, [FromBody] UserModel user)
+        public async Task<IActionResult> UpdateSingleUser(long id, [FromBody] UserModel user)
         {
-            var updatedUser = service.UpdateUser(id, user);
+            var updatedUser = await service.UpdateUser(id, user);
             if (updatedUser != null)
             {
                 return Ok(updatedUser);
@@ -65,9 +70,9 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpPut("{userId}/Article/{articleId}")]
 
-        public IActionResult UpdateArticleInfo(long userId, long articleId, [FromBody] Article article)
+        public async Task<IActionResult> UpdateArticleInfo(long userId, long articleId, [FromBody] Article article)
         {
-            var updatedArticle = service.UpdateArticleInfo(articleId, userId, article);
+            var updatedArticle = await service.UpdateArticleInfo(articleId, userId, article);
             if (updatedArticle != null)
             {
                 return Ok(updatedArticle);
@@ -77,9 +82,9 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpDelete("{id}")]
 
-        public IActionResult DeleteSingleUser(long id)
+        public async Task<IActionResult> DeleteSingleUser(long id)
         {
-            if (service.DeleteSingleUser(id) == true)
+            if (await service.DeleteSingleUser(id) == true)
             {
                 return Ok($"User with id {id} has been deleted.");
             }
@@ -88,9 +93,9 @@ namespace Projekt.WebAPI.Controllers
 
         [HttpGet(Name = "getFilteredUsers")]
 
-        public IActionResult GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
+        public async Task<IActionResult> GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
         {
-            var users = service.GetUserModelList(age, name, lastName, id, email, numberOfArticles);
+            var users = await service.GetUserModelList(age, name, lastName, id, email, numberOfArticles);
             if (users != null)
             {
                 return Ok(users);

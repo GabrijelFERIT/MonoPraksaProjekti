@@ -15,7 +15,7 @@ namespace Projekti.Repository
     {
         string connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=OsijekPraksa123.";
         private static List<UserModel> listOfUsers = new List<UserModel>();
-        public UserModel PostCreateUser( UserModel user)
+        public async Task<UserModel> PostCreateUser( UserModel user)
         {
             try
             {
@@ -35,10 +35,10 @@ namespace Projekti.Repository
                     user.Articles = new List<Article>();
                 }
 
-                connection.Open();
-                using var reader = command.ExecuteReader();
+                await connection.OpenAsync();
+                using var reader = await command.ExecuteReaderAsync();
 
-                if (reader.Read())
+                if (await reader.ReadAsync())
                 {
                     user.Id = reader.GetInt64(0);
                     listOfUsers.Add(user);
@@ -55,7 +55,7 @@ namespace Projekti.Repository
         }
 
 
-        public UserModel GetSingleUserInfo(long id)
+        public async Task<UserModel> GetSingleUserInfo(long id)
         {
             UserModel user = new UserModel();
 
@@ -64,10 +64,10 @@ namespace Projekti.Repository
 
             command.Parameters.AddWithValue("@Id", id);
 
-            connection.Open();
-            using var reader = command.ExecuteReader();
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
 
-            if (reader.Read())
+            if (await reader.ReadAsync())
             {
                 user.FirstName = reader.GetString(reader.GetOrdinal("FirstName"));
                 user.LastName = reader.GetString(reader.GetOrdinal("LastName"));
@@ -82,7 +82,7 @@ namespace Projekti.Repository
         }
 
 
-        public Article PostAddArticleUser(long id, Article article)
+        public async Task<Article> PostAddArticleUser(long id, Article article)
         {
             string sql = "INSERT INTO \"Article\" (\"Name\", \"Description\", \"CurrentPrice\", \"UserId\") VALUES (@Name, @Description, @CurrentPrice, @UserId)";
 
@@ -96,8 +96,8 @@ namespace Projekti.Repository
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
                 return article;
             }
             catch (Exception e)
@@ -107,7 +107,7 @@ namespace Projekti.Repository
         }
 
 
-        public UserModel PutUpdateUserInfo(long id, UserModel updatedData)
+        public async Task<UserModel> PutUpdateUserInfo(long id, UserModel updatedData)
         {
             string sql = @"UPDATE ""UserModel""
                 SET
@@ -130,8 +130,8 @@ namespace Projekti.Repository
 
             try
             {
-                connection.Open();
-                int effectedRows = command.ExecuteNonQuery();
+                await connection.OpenAsync();
+                int effectedRows = await command.ExecuteNonQueryAsync();
 
                 if (effectedRows > 0)
                 {
@@ -175,7 +175,7 @@ namespace Projekti.Repository
 
 
 
-        public bool DeleteSingleUserInfo(long id)
+        public async Task<bool> DeleteSingleUserInfo(long id)
         {
             try
             {
@@ -191,9 +191,9 @@ namespace Projekti.Repository
                 command.Parameters.AddWithValue("@Id", id);
 
 
-                connection.Open();
+                await connection.OpenAsync();
 
-                int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = await command.ExecuteNonQueryAsync();
 
 
                 if (rowsAffected >= 0)
@@ -211,7 +211,7 @@ namespace Projekti.Repository
             return false;
         }
 
-        public List<UserModel> GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
+        public async Task<List<UserModel>> GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
         {
             List<UserModel> listOfUsers = new List<UserModel>();
 
@@ -222,7 +222,7 @@ namespace Projekti.Repository
 
                 command.CommandText = UserFilter.FilterUsersSQL(command, age, name, lastName, id, email, numberOfArticles);
 
-                connection.Open();
+                await connection.OpenAsync();
                 using var reader = command.ExecuteReader();
 
                 while (reader.Read())
