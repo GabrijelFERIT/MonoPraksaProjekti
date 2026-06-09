@@ -86,6 +86,9 @@
       "Projekti.Common.Repository/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Projekti.Model": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Projekti.Common.Repository.dll": {}
         },
@@ -96,6 +99,9 @@
       "Projekti.Common.Service/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Projekti.Model": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Projekti.Common.Service.dll": {}
         },

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
 using Projekti.Model;
 using System;
 using System.Collections.ObjectModel;
 using Projekti.Service;
 using System.Runtime.CompilerServices;
 using Projekti.Common.Service;
+using Projekti.Common;
 
 
 namespace Projekt.WebAPI.Controllers
@@ -15,16 +15,25 @@ namespace Projekt.WebAPI.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+
+        private readonly IUserModelService userService;
+
+        public UserController(IUserModelService service)
+        {
+            this.userService = service;
+        }
+
+
         private static List<UserModel> listOfUsers = new List<UserModel>();
-        string connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=OsijekPraksa123.";
-        UserModelService service = new UserModelService();
+
+
 
 
         [HttpGet("{id}")]
 
         public async Task<ActionResult> GetSingleUser(long id)
         {            
-            var user = await service.GetSingleUser(id);            
+            var user = await userService.GetSingleUser(id);            
             if (user != null)
             {
                 return Ok(user);
@@ -36,7 +45,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> CreateNewUser([FromBody] UserModel user)
         {
-            var createdUser = await service.CreateUser(user);
+            var createdUser = await userService.CreateUser(user);
             if (createdUser != null)
             {
                 return Ok(createdUser);
@@ -48,7 +57,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> AddArticleToUser(long id, [FromBody] Article article)
         {
-            var updatedUser = await service.AddArticleToUser(id, article);
+            var updatedUser = await userService.AddArticleToUser(id, article);
             if (updatedUser != null)
             {
                 return Ok(updatedUser);
@@ -60,7 +69,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> UpdateSingleUser(long id, [FromBody] UserModel user)
         {
-            var updatedUser = await service.UpdateUser(id, user);
+            var updatedUser = await userService.UpdateUser(id, user);
             if (updatedUser != null)
             {
                 return Ok(updatedUser);
@@ -72,7 +81,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> UpdateArticleInfo(long userId, long articleId, [FromBody] Article article)
         {
-            var updatedArticle = await service.UpdateArticleInfo(articleId, userId, article);
+            var updatedArticle = await userService.UpdateArticleInfo(articleId, userId, article);
             if (updatedArticle != null)
             {
                 return Ok(updatedArticle);
@@ -84,7 +93,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> DeleteSingleUser(long id)
         {
-            if (await service.DeleteSingleUser(id) == true)
+            if (await userService.DeleteSingleUser(id) == true)
             {
                 return Ok($"User with id {id} has been deleted.");
             }
@@ -95,7 +104,7 @@ namespace Projekt.WebAPI.Controllers
 
         public async Task<IActionResult> GetFilteredUsers(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
         {
-            var users = await service.GetUserModelList(age, name, lastName, id, email, numberOfArticles);
+            var users = await userService.GetUserModelList(age, name, lastName, id, email, numberOfArticles);
             if (users != null)
             {
                 return Ok(users);

@@ -10,10 +10,17 @@ using Projekti.Common.Service;
 
 namespace Projekti.Service
 {
+
+
+
     public class UserModelService : IUserModelService
     {
+        private readonly IUserModelRepository userModelRepository;
 
-        UserModelRepository userModelRepository = new UserModelRepository();
+        public UserModelService(IUserModelRepository userModelRepository)
+        {
+            this.userModelRepository = userModelRepository;
+        }
 
         public async Task<List<UserModel>> GetUserModelList(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)
         {

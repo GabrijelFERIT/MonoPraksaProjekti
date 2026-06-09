@@ -33,7 +33,11 @@
           "net8.0": {
             "framework": "net8.0",
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj": {
+                "projectPath": "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

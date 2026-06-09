@@ -1,11 +1,30 @@
 {
   "version": 4,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Projekti.Model/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Projekti.Model.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projekti.Model.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Projekti.Model/1.0.0": {
+      "type": "project",
+      "path": "../Projekti.Model/Projekti.Model.csproj",
+      "msbuildProject": "../Projekti.Model/Projekti.Model.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Projekti.Model >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\gabib\\.nuget\\packages\\": {},
@@ -40,7 +59,11 @@
         "net8.0": {
           "framework": "net8.0",
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj": {
+              "projectPath": "C:\\Users\\gabib\\source\\repos\\Projekti\\Projekti.Model\\Projekti.Model.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

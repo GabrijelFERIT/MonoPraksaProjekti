@@ -1,28 +1,42 @@
-﻿using System;
+﻿using Npgsql;
+using Projekti.Common;
+using Projekti.Common;
+using Projekti.Common.Repository;
+using Projekti.Model;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Projekti.Model;
-using Projekti.Common.Repository;
-using Projekti.Common;
-using Npgsql;
-using Projekti.Common;
 
 namespace Projekti.Repository
 {
     public class UserModelRepository : IUserModelRepository
     {
-        string connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=OsijekPraksa123.";
+
+        private readonly NpgsqlConnection _connection;
+
+
         private static List<UserModel> listOfUsers = new List<UserModel>();
-        public async Task<UserModel> PostCreateUser( UserModel user)
+
+        public UserModelRepository(NpgsqlConnection connection)
+        {
+            _connection = connection;
+        }
+
+        public async Task<UserModel> PostCreateUser(UserModel user)
         {
             try
             {
                 string sql = "INSERT INTO \"UserModel\" (\"FirstName\", \"LastName\", \"Age\", \"Email\", \"Password\") VALUES (@FirstName, @LastName, @Age, @Email, @Password) RETURNING \"Id\"";
 
-                using var connection = new Npgsql.NpgsqlConnection(connectionString);
-                using var command = new Npgsql.NpgsqlCommand(sql, connection);
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    await _connection.OpenAsync();
+                }
+                using var command = new Npgsql.NpgsqlCommand(sql, _connection);
 
                 command.Parameters.AddWithValue("@FirstName", user.FirstName);
                 command.Parameters.AddWithValue("@LastName", user.LastName);
@@ -35,7 +49,6 @@ namespace Projekti.Repository
                     user.Articles = new List<Article>();
                 }
 
-                await connection.OpenAsync();
                 using var reader = await command.ExecuteReaderAsync();
 
                 if (await reader.ReadAsync())
@@ -57,14 +70,16 @@ namespace Projekti.Repository
 
         public async Task<UserModel> GetSingleUserInfo(long id)
         {
-            UserModel user = new UserModel();
 
-            using var connection = new Npgsql.NpgsqlConnection(connectionString);
-            using var command = new Npgsql.NpgsqlCommand("SELECT * FROM \"UserModel\" WHERE \"Id\" = @Id", connection);
+            UserModel user = new UserModel();
+            if (_connection.State == ConnectionState.Closed)
+            {
+                await _connection.OpenAsync();
+            }
+            using var command = new Npgsql.NpgsqlCommand("SELECT * FROM \"UserModel\" WHERE \"Id\" = @Id", _connection);
 
             command.Parameters.AddWithValue("@Id", id);
 
-            await connection.OpenAsync();
             using var reader = await command.ExecuteReaderAsync();
 
             if (await reader.ReadAsync())
@@ -86,8 +101,14 @@ namespace Projekti.Repository
         {
             string sql = "INSERT INTO \"Article\" (\"Name\", \"Description\", \"CurrentPrice\", \"UserId\") VALUES (@Name, @Description, @CurrentPrice, @UserId)";
 
-            using var connection = new Npgsql.NpgsqlConnection(connectionString);
-            using var command = new Npgsql.NpgsqlCommand(sql, connection);
+
+
+            if (_connection.State == ConnectionState.Closed)
+            {
+                await _connection.OpenAsync();
+            }
+
+            using var command = new Npgsql.NpgsqlCommand(sql, _connection);
 
             command.Parameters.AddWithValue("@Name", article.Name);
             command.Parameters.AddWithValue("@Description", article.Description);
@@ -96,7 +117,6 @@ namespace Projekti.Repository
 
             try
             {
-                await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
                 return article;
             }
@@ -118,8 +138,9 @@ namespace Projekti.Repository
             ""Password"" = @Password
                 WHERE ""Id"" = @Id";
 
-            using var connection = new Npgsql.NpgsqlConnection(connectionString);
-            using var command = new Npgsql.NpgsqlCommand(sql, connection);
+
+
+            using var command = new Npgsql.NpgsqlCommand(sql, _connection);
 
             command.Parameters.AddWithValue("@FirstName", updatedData.FirstName);
             command.Parameters.AddWithValue("@LastName", updatedData.LastName);
@@ -130,7 +151,11 @@ namespace Projekti.Repository
 
             try
             {
-                await connection.OpenAsync();
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    await _connection.OpenAsync();
+                }
+
                 int effectedRows = await command.ExecuteNonQueryAsync();
 
                 if (effectedRows > 0)
@@ -179,19 +204,20 @@ namespace Projekti.Repository
         {
             try
             {
-                using var connection = new Npgsql.NpgsqlConnection(connectionString);
+
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    await _connection.OpenAsync();
+                }
 
 
 
                 string sql = $"DELETE FROM \"UserModel\" WHERE \"Id\" = {id}";
 
-                Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(sql, connection);
+                Npgsql.NpgsqlCommand command = new Npgsql.NpgsqlCommand(sql, _connection);
 
 
                 command.Parameters.AddWithValue("@Id", id);
-
-
-                await connection.OpenAsync();
 
                 int rowsAffected = await command.ExecuteNonQueryAsync();
 
@@ -217,12 +243,19 @@ namespace Projekti.Repository
 
             try
             {
-                using var connection = new Npgsql.NpgsqlConnection(connectionString);
-                using var command = new NpgsqlCommand("", connection);
+
+
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    await _connection.OpenAsync();
+                }
+
+
+                using var command = new NpgsqlCommand("", _connection);
 
                 command.CommandText = UserFilter.FilterUsersSQL(command, age, name, lastName, id, email, numberOfArticles);
 
-                await connection.OpenAsync();
+
                 using var reader = command.ExecuteReader();
 
                 while (reader.Read())
