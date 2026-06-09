@@ -7,6 +7,7 @@ using Projekti.Service;
 using System.Runtime.CompilerServices;
 using Projekti.Common.Service;
 using Projekti.Common;
+using AutoMapper;
 
 
 namespace Projekt.WebAPI.Controllers
@@ -17,10 +18,12 @@ namespace Projekt.WebAPI.Controllers
     {
 
         private readonly IUserModelService userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserModelService service)
+        public UserController(IUserModelService service, IMapper mapper)
         {
             this.userService = service;
+            this._mapper = mapper;
         }
 
 
@@ -36,7 +39,7 @@ namespace Projekt.WebAPI.Controllers
             var user = await userService.GetSingleUser(id);            
             if (user != null)
             {
-                return Ok(user);
+                return Ok(_mapper.Map<UserModelDto>(user));
             }
             return NotFound("No users found.");
         }
@@ -72,7 +75,7 @@ namespace Projekt.WebAPI.Controllers
             var updatedUser = await userService.UpdateUser(id, user);
             if (updatedUser != null)
             {
-                return Ok(updatedUser);
+                return Ok(_mapper.Map<UserModelDto>(updatedUser));
             }
             return NotFound($"User with id {id} not found.");
         }
@@ -107,7 +110,7 @@ namespace Projekt.WebAPI.Controllers
             var users = await userService.GetUserModelList(age, name, lastName, id, email, numberOfArticles);
             if (users != null)
             {
-                return Ok(users);
+                return Ok(_mapper.Map<List<UserModelDto>>(users));
             }
             return NotFound("No users found.");
         }

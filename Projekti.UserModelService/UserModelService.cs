@@ -7,6 +7,7 @@ using Projekti.Repository;
 using Projekti.Model;
 using Projekti.Common.Repository;
 using Projekti.Common.Service;
+using AutoMapper;
 
 namespace Projekti.Service
 {
@@ -20,6 +21,7 @@ namespace Projekti.Service
         public UserModelService(IUserModelRepository userModelRepository)
         {
             this.userModelRepository = userModelRepository;
+
         }
 
         public async Task<List<UserModel>> GetUserModelList(short age = 0, string name = "", string lastName = "", long id = 0, string email = "", int numberOfArticles = 0)

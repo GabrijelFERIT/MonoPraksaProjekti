@@ -4,6 +4,7 @@ using Projekti.Common.Service;
 using Projekti.Infrastructure;
 using Projekti.Service;
 using Projekti.Infrastructure;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {

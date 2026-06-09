@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using Projekti.Common;
 using Projekti.Common;
 using Projekti.Common.Repository;
@@ -13,6 +15,8 @@ using System.Threading.Tasks;
 
 namespace Projekti.Repository
 {
+
+
     public class UserModelRepository : IUserModelRepository
     {
 
@@ -21,7 +25,7 @@ namespace Projekti.Repository
 
         private static List<UserModel> listOfUsers = new List<UserModel>();
 
-        public UserModelRepository(NpgsqlConnection connection)
+        public UserModelRepository(NpgsqlConnection connection, IMapper mapper)
         {
             _connection = connection;
         }
@@ -90,7 +94,7 @@ namespace Projekti.Repository
                 user.Age = reader.GetInt16(reader.GetOrdinal("Age"));
                 user.Articles = new List<Article>();
 
-                return user;
+               return user;
             }
 
             return null;
